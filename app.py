@@ -1,37 +1,30 @@
-from flask import Flask
-from flask import render_template_string
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-@app.route('/')
-def mission():
-    return "Миссия Колонизация Марса"
 
-@app.route('/index')
-def motto():
-    return "И на Марсе будут яблони цвести!"
+@app.route("/", methods=["GET", "POST"])
+def index():
+    if request.method == "POST":
+        surname = request.form["surname"]
+        name = request.form["name"]
+        email = request.form["email"]
+        education = request.form["education"]
+        profession = request.form["profession"]
+        gender = request.form["gender"]
+        motivation = request.form["motivation"]
+        stay = request.form["stay"]
 
-@app.route('/promotion')
-def promotion():
-    return "Человечество вырастает из детства.<br><br>Человечеству мала одна планета.<br><br>Мы сделаем обитаемыми безжизненные пока планеты.<br><br>И начнем с Марса!<br><br>Присоединяйся!"
+        return f"<h2>Спасибо за вашу заявку, {name} {surname}!</h2>"
 
-@app.route('/image_mars')
-def image_mars():
-    html_content = """
-    <!DOCTYPE html>
-    <html lang='ru'>
-    <head>
-        <meta charset='UTF-8'>
-        <title>Привет, Марс!</title>
-    </head>
-    <body>
-        <h1>Жди нас, Марс!</h1>
-        <img src='https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg' alt='Изображение Марса' width='500'>
-        <p>Вот он, загадочный красный Марс!</p>
-    </body>
-    </html>
-    """
-    return render_template_string(html_content)
+    professions = [
+        "Инженер-исследователь", "Пилот", "Строитель", "Экзобиолог", "Врач", "Инженер по терраформированию",
+        "Климатолог", "Специалист по радиационной защите", "Астрогеолог", "Гляциолог", "Инженер жизнеобеспечения",
+        "Метеоролог", "Оператор марсохода", "Киберинженер", "Штурман", "Пилот дронов"
+    ]
 
-if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8080)
+    return render_template("form.html", professions=professions)
+
+
+if __name__ == "__main__":
+    app.run(debug=True)

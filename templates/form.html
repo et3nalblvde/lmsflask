@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анкета для миссии на Марс</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        textarea {
+            resize: vertical;
+        }
+        button {
+            background-color: #37b9f1;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #2a8fbf;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Анкета для соискателей места в миссии на Марс</h1>
+        <form method="POST">
+            <div class="form-group">
+                <label for="surname">Фамилия</label>
+                <input type="text" id="surname" name="surname" required>
+            </div>
+            <div class="form-group">
+                <label for="name">Имя</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="education">Образование</label>
+                <input type="text" id="education" name="education" required>
+            </div>
+            <div class="form-group">
+                <label for="profession">Основная профессия</label>
+                <select id="profession" name="profession" required>
+                    {% for profession in professions %}
+                        <option value="{{ profession }}">{{ profession }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="gender">Пол</label>
+                <select id="gender" name="gender" required>
+                    <option value="Мужской">Мужской</option>
+                    <option value="Женский">Женский</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="motivation">Мотивация</label>
+                <textarea id="motivation" name="motivation" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="stay">Готовы ли остаться на Марсе?</label>
+                <select id="stay" name="stay" required>
+                    <option value="Да">Да</option>
+                    <option value="Нет">Нет</option>
+                </select>
+            </div>
+            <button type="submit">Отправить заявку</button>
+        </form>
+    </div>
+</body>
+</html>
