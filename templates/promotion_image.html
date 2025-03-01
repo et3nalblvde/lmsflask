@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Марс</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h1 class="display-4">Жди нас, Марс!</h1>
+    <p class="lead">Человечество вырастает из детства.</p>
+    <p>Человечеству мала одна планета.</p>
+    <p>Мы сделаем обитаемыми безжизненные пока планеты.</p>
+    <p>И начнем с Марса!</p>
+    <p>Присоединяйся!</p>
+    <img src="{{ url_for('static', filename='img/mars1.jpg') }}" class="img-fluid" alt="Марс">
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
