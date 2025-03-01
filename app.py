@@ -4,9 +4,9 @@ from flask_bootstrap import Bootstrap
 app = Flask(__name__)
 Bootstrap(app)
 
-@app.route('/choice/<planet_name>')
-def choice(planet_name):
-    return render_template('choice.html', planet_name=planet_name)
+@app.route('/results/<nickname>/<int:level>/<float:rating>')
+def results(nickname, level, rating):
+    return render_template('results.html', nickname=nickname, level=level, rating=rating)
 
 if __name__ == '__main__':
     app.run(debug=True)
