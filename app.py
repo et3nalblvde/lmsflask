@@ -7,10 +7,18 @@ app = Flask(__name__)
 def index(title="Заготовка"):
     return render_template('base.html', title=title)
 
-@app.route('/distribution')
-def distribution():
-    astronauts = ["Иван Иванов", "Мария Петрова", "Сергей Сидоров", "Анна Кузнецова", "Дмитрий Павлов"]
-    return render_template('distribution.html', astronauts=astronauts)
+@app.route('/table/<gender>/<int:age>')
+def table(gender, age):
+    if gender == 'male':
+        wall_color = 'blue' if age > 21 else 'lightblue'
+    elif gender == 'female':
+        wall_color = 'red' if age > 21 else 'lightpink'
+    else:
+        wall_color = 'white'
+
+    martian_img = 'adult_martian.png' if age > 21 else 'child_martian.png'
+
+    return render_template('table.html', wall_color=wall_color, martian_img=martian_img)
 
 if __name__ == '__main__':
     app.run(debug=True)

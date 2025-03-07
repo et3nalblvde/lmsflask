@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Оформление каюты</h2>
+    <table class="table table-bordered">
+        <tr>
+            <td>Цвет стен</td>
+            <td style="background-color: {{ wall_color }};">{{ wall_color }}</td>
+        </tr>
+        <tr>
+            <td>Эскиз</td>
+            <td><img src="{{ url_for('static', filename='img/' ~ martian_img) }}" alt="Марсианин"></td>
+        </tr>
+    </table>
+{% endblock %}
