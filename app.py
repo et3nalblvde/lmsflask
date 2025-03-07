@@ -7,5 +7,9 @@ app = Flask(__name__)
 def index(title="Заготовка"):
     return render_template('base.html', title=title)
 
+@app.route('/training/<prof>')
+def training(prof):
+    return render_template('training.html', prof=prof)
+
 if __name__ == '__main__':
     app.run(debug=True)
