@@ -16,7 +16,7 @@ form button {
 }
 
 body::before {
-    content: url('{{ url_for('static', filename='img/MARS-2-7.png') }}');
+    content: url('/static/img/MARS-2-7.png');
     display: block;
     margin: 0 auto 20px;
     max-width: 100px;
