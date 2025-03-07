@@ -1,12 +1,11 @@
 from flask import Flask, render_template
-from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
-Bootstrap(app)
 
-@app.route('/promotion_image')
-def promotion_image():
-    return render_template('promotion_image.html')
+@app.route('/')
+@app.route('/index/<title>')
+def index(title="Заготовка"):
+    return render_template('base.html', title=title)
 
 if __name__ == '__main__':
     app.run(debug=True)
