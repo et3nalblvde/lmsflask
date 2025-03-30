@@ -1,21 +1,19 @@
-import os
-import json
-import random
-from flask import Flask, render_template
+from flask import Flask
+from models import db
+from users_api import users_api
+from views import views
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-@app.route('/')
-@app.route('/index/<title>')
-def index(title="Заготовка"):
-    return render_template('base.html', title=title)
+db.init_app(app)
 
-@app.route('/member')
-def member():
-    with open('templates/crew.json', 'r', encoding='utf-8') as f:
-        crew = json.load(f)
-    random_member = random.choice(crew)
-    return render_template('member.html', member=random_member)
 
-if __name__ == '__main__':
+app.register_blueprint(users_api)
+app.register_blueprint(views)
+
+if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
