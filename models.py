@@ -1,6 +1,7 @@
-from sqlalchemy import Column, Integer, String, DateTime
-from sqlalchemy.orm import declarative_base
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
 import datetime
+from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
 
@@ -17,3 +18,5 @@ class User(Base):
     email = Column(String, unique=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     modified_date = Column(DateTime, default=datetime.datetime.utcnow)
+
+    departments = relationship('Department', secondary='department_members', back_populates='members')
