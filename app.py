@@ -8,13 +8,11 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mars_one.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# Инициализация flask-login
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
 
-# Модель пользователя
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
@@ -23,20 +21,19 @@ class User(UserMixin, db.Model):
     last_name = db.Column(db.String(150), nullable=False)
 
 
-# Модель работы
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(150), nullable=False)
     description = db.Column(db.Text, nullable=False)
+    creator_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    creator = db.relationship('User', backref=db.backref('tasks', lazy=True))
 
 
-# Загрузка пользователя
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-# Главная страница (показ работ)
 @app.route("/")
 @app.route("/home")
 @login_required
@@ -45,7 +42,6 @@ def home():
     return render_template("home.html", tasks=tasks)
 
 
-# Страница авторизации
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -54,7 +50,7 @@ def login():
 
         user = User.query.filter_by(username=username).first()
 
-        if user and user.password == password:  # Здесь должен быть хэшированный пароль
+        if user and user.password == password:
             login_user(user)
             return redirect(url_for("home"))
         else:
@@ -63,7 +59,6 @@ def login():
     return render_template("login.html")
 
 
-# Страница регистрации
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -85,7 +80,6 @@ def register():
     return render_template("register.html")
 
 
-# Страница добавления работы
 @app.route("/add_task", methods=["GET", "POST"])
 @login_required
 def add_task():
@@ -93,7 +87,7 @@ def add_task():
         title = request.form["title"]
         description = request.form["description"]
 
-        new_task = Task(title=title, description=description)
+        new_task = Task(title=title, description=description, creator_id=current_user.id)
         db.session.add(new_task)
         db.session.commit()
         flash("Работа успешно добавлена!")
@@ -102,7 +96,26 @@ def add_task():
     return render_template("add_task.html")
 
 
-# Выход из системы
+@app.route("/edit_task/<int:task_id>", methods=["GET", "POST"])
+@login_required
+def edit_task(task_id):
+    task = Task.query.get_or_404(task_id)
+
+    if task.creator_id != current_user.id and current_user.id != 1:
+        flash("У вас нет прав на редактирование этой работы.")
+        return redirect(url_for("home"))
+
+    if request.method == "POST":
+        task.title = request.form["title"]
+        task.description = request.form["description"]
+
+        db.session.commit()
+        flash("Работа успешно обновлена!")
+        return redirect(url_for("home"))
+
+    return render_template("edit_task.html", task=task)
+
+
 @app.route("/logout")
 @login_required
 def logout():
