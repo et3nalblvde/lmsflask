@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Добавить департамент</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <label for="name">Название департамента</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="description">Описание</label>
+    <textarea id="description" name="description"></textarea>
+
+    <button type="submit">Добавить</button>
+</form>
+{% endblock %}

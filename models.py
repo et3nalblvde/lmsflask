@@ -1,20 +1,28 @@
-from datetime import datetime
-from app import db
-from flask_login import UserMixin
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 
-# Модель пользователя
-class User(db.Model, UserMixin):
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'  # или ваш URI для базы данных
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+
+class Department(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(120), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(60), nullable=False)
+    name = db.Column(db.String(100), nullable=False, unique=True)
+    description = db.Column(db.String(255))
 
-# Модель задачи
-class Task(db.Model):
+    def __repr__(self):
+        return f'<Department {self.name}>'
+
+class Work(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text, nullable=False)
-    deadline = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    priority = db.Column(db.String(20), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship('User', backref='tasks', lazy=True)
+    description = db.Column(db.String(255))
+    department_id = db.Column(db.Integer, db.ForeignKey('department.id'), nullable=True)
+    department = db.relationship('Department', backref=db.backref('works', lazy=True))
+
+    def __repr__(self):
+        return f'<Work {self.title}>'
+
+if __name__ == "__main__":
+    db.create_all()

@@ -80,6 +80,44 @@ def register():
     return render_template("register.html")
 
 
+@app.route("/add_department", methods=["GET", "POST"])
+@login_required
+def add_department():
+    if request.method == "POST":
+        name = request.form["name"]
+        description = request.form["description"]
+
+        new_department = Department(name=name, description=description)
+        db.session.add(new_department)
+        db.session.commit()
+        flash("Департамент успешно добавлен!")
+        return redirect(url_for("list_departments"))
+
+    return render_template("add_department.html")
+
+
+@app.route("/edit_department/<int:department_id>", methods=["GET", "POST"])
+@login_required
+def edit_department(department_id):
+    department = Department.query.get_or_404(department_id)
+
+    if request.method == "POST":
+        department.name = request.form["name"]
+        department.description = request.form["description"]
+        db.session.commit()
+        flash("Департамент успешно обновлен!")
+        return redirect(url_for("list_departments"))
+
+    return render_template("edit_department.html", department=department)
+
+
+@app.route("/departments")
+@login_required
+def list_departments():
+    departments = Department.query.all()
+    return render_template("list_departments.html", departments=departments)
+
+
 @app.route("/add_task", methods=["GET", "POST"])
 @login_required
 def add_task():

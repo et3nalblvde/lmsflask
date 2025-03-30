@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Список работ</h2>
+
+<!-- Кнопка для перехода на страницу департаментов -->
+<a href="{{ url_for('list_departments') }}">Смотреть департаменты</a>
+
+<ul>
+    {% for work in works %}
+    <li>
+        <strong>{{ work.title }}</strong> - {{ work.description }}
+        {% if work.department %}
+        <span> (Департамент: {{ work.department.name }})</span>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+
+{% if current_user.is_authenticated %}
+    <a href="{{ url_for('add_task') }}">Добавить работу</a>
+{% endif %}
+{% endblock %}
