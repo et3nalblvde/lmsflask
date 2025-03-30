@@ -124,14 +124,22 @@ def add_task():
     if request.method == "POST":
         title = request.form["title"]
         description = request.form["description"]
+        category_ids = request.form.getlist("categories")
 
         new_task = Task(title=title, description=description, creator_id=current_user.id)
+
+        # Связываем задачу с выбранными категориями
+        for category_id in category_ids:
+            category = Category.query.get(category_id)
+            new_task.categories.append(category)
+
         db.session.add(new_task)
         db.session.commit()
         flash("Работа успешно добавлена!")
         return redirect(url_for("home"))
 
-    return render_template("add_task.html")
+    categories = Category.query.all()
+    return render_template("add_task.html", categories=categories)
 
 
 @app.route("/edit_task/<int:task_id>", methods=["GET", "POST"])

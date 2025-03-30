@@ -1,0 +1,16 @@
+<form method="POST">
+  <label for="title">Заголовок работы</label>
+  <input type="text" name="title" required>
+
+  <label for="description">Описание работы</label>
+  <textarea name="description" required></textarea>
+
+  <label for="categories">Категория</label>
+  <select name="categories" multiple>
+    {% for category in categories %}
+      <option value="{{ category.id }}">{{ category.name }}</option>
+    {% endfor %}
+  </select>
+
+  <button type="submit">Добавить задачу</button>
+</form>
