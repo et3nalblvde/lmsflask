@@ -56,4 +56,4 @@ def users_show(user_id):
 
     map_url = f"https://static-maps.yandex.ru/1.x/?ll={longitude},{latitude}&spn=0.2,0.2&l=map&pt={longitude},{latitude},pm2rdm"
 
-    return render_template("user_map.html", user=user, city=city, map_url=map_url)
+    return render_template("login.html", user=user, city=city, map_url=map_url)

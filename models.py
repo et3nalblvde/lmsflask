@@ -1,20 +1,20 @@
-from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+from app import db
+from flask_login import UserMixin
 
-db = SQLAlchemy()
-
-class User(db.Model):
-    __tablename__ = 'users'
+# Модель пользователя
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
+    username = db.Column(db.String(120), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    age = db.Column(db.Integer, nullable=False)
-    city_from = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.String(60), nullable=False)
 
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "name": self.name,
-            "email": self.email,
-            "age": self.age,
-            "city_from": self.city_from
-        }
+# Модель задачи
+class Task(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    deadline = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    priority = db.Column(db.String(20), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', backref='tasks', lazy=True)
